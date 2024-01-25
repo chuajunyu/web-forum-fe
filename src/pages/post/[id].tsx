@@ -6,7 +6,6 @@ import AddComment from "../../../components/AddComment";
 import { Container } from "@mui/material";
 import { BACKEND_BASE_URL } from "../../../components/constants";
 
-
 interface Comment {
   id: string;
   user_id: string;
@@ -27,25 +26,23 @@ function Index() {
 
     console.log(`id: ${id}`);
 
-    if (id) {
-      // Your code that depends on the id value
-      const token = localStorage.getItem("token");
-      console.log(`Bearer <${token}>`);
-      async function getcomments() {
-        const response = await fetch(
-          BACKEND_BASE_URL + `/commentsbypost/${id}`,
-          {
-            method: "GET",
-            headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json",},
-          }
-        );
-        return response.json();
-      } 
+    // Your code that depends on the id value
+    const token = localStorage.getItem("token");
+    console.log(`Bearer <${token}>`);
+    async function getcomments() {
+      const response = await fetch(BACKEND_BASE_URL + `/commentsbypost/${id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      return response.json();
+    }
     getcomments().then((output) => {
       console.log(output);
       setComments(output);
     });
-    }
   }, [Id, router.query]);
 
   return (
