@@ -8,7 +8,7 @@ export default function Home() {
   const router = useRouter();
 
   const handleClick = () => {
-    router.push('/new-page');
+    router.push("/signin");
   };
 
   return (
@@ -26,14 +26,18 @@ export default function Home() {
         backgroundPosition: "center",
       }}
     >
-      
-      <Typography variant="h1" align="center" gutterBottom>
+      <Typography
+        variant="h1"
+        align="center"
+        gutterBottom
+        style={{ marginTop: 24 }}
+      >
         Web Forum
       </Typography>
       <Typography variant="h4" align="center" gutterBottom>
         A fair and open forum for all
       </Typography>
-      <Button variant="contained" color="primary" size="large" fullWidth>
+      <Button onClick={handleClick} variant="contained" color="primary" size="large" fullWidth>
         Enter
       </Button>
     </Box>

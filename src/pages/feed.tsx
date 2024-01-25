@@ -31,7 +31,11 @@ const featuredPosts = [
   },
 ];
 
+
+
 const FeedPage: React.FC = () => {
+  
+  
   return (
     <Container maxWidth="lg">
       <h1>Forum Feed</h1>
