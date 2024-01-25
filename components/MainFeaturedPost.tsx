@@ -1,23 +1,44 @@
 import * as React from "react";
+import { useState, useEffect } from "react"; // Add the missing import statement for useState
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Box from "@mui/material/Box";
 import Image from "next/image";
+import { BACKEND_BASE_URL } from "./constants";
 
 interface MainFeaturedPostProps {
+  
   post: {
-    description: string;
-    image: string;
-    imageText: string;
-    linkText: string;
+    user_id: string;
+    id: string;
+    content: string;
+    created_at: string;
     title: string;
   };
 }
 
+
+
 export default function MainFeaturedPost(props: MainFeaturedPostProps) {
+  const [username, setUsername] = useState<string>("");
   const { post } = props;
+  console.log(props);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    async function getUser() {
+      const response = await fetch(BACKEND_BASE_URL + "/me", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.json()
+    }
+    getUser().then((output) => {
+      setUsername(output.name);
+    });
+    }, []);
 
   return (
     <Paper
@@ -29,11 +50,11 @@ export default function MainFeaturedPost(props: MainFeaturedPostProps) {
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "center",
-        backgroundImage: `url(${post.image})`,
+        backgroundImage: `url(https://source.unsplash.com/random?wallpapers)`,
       }}
     >
       {/* Increase the priority of the hero background image */}
-      <img style={{ display: "none" }} src={post.image} alt={post.imageText} />
+      <img style={{ display: "none" }} src={"https://source.unsplash.com/random?wallpapers"} alt={"random image"} />
       <Box
         sx={{
           position: "absolute",
@@ -59,13 +80,16 @@ export default function MainFeaturedPost(props: MainFeaturedPostProps) {
               color="inherit"
               gutterBottom
             >
-              {post.title}
+              {post && post.title}
             </Typography>
             <Typography variant="h5" color="inherit" paragraph>
-              {post.description}
+              By {username}
             </Typography>
-            <Link variant="subtitle1" href="#">
-              {post.linkText}
+            <Typography variant="h5" color="inherit" paragraph>
+              {post && post.content}
+            </Typography>
+            <Link variant="subtitle1" href={`./post/${post && post.id}`}>
+              continue reading...
             </Link>
           </Box>
         </Grid>

@@ -2,47 +2,45 @@ import React from "react";
 import FeaturedPost from "../../components/FeaturedPost";
 import MainFeaturedPost from "../../components/MainFeaturedPost";
 import { Container, Grid } from "@mui/material";
+import { BACKEND_BASE_URL } from "../../components/constants";
+import { useState, useEffect } from "react";
 
-const mainFeaturedPost = {
-  title: "Title of a longer featured blog post",
-  description:
-    "Multiple lines of text that form the lede, informing new readers quickly and efficiently about what's most interesting in this post's contents.",
-  image: "https://source.unsplash.com/random?wallpapers",
-  imageText: "main image description",
-  linkText: "Continue reading…",
-};
-
-const featuredPosts = [
-  {
-    title: "Featured post",
-    date: "Nov 12",
-    description:
-      "This is a wider card with supporting text below as a natural lead-in to additional content.",
-    image: "https://source.unsplash.com/random?wallpapers",
-    imageLabel: "Image Text",
-  },
-  {
-    title: "Post title",
-    date: "Nov 11",
-    description:
-      "This is a wider card with supporting text below as a natural lead-in to additional content.",
-    image: "https://source.unsplash.com/random?wallpapers",
-    imageLabel: "Image Text",
-  },
-];
-
-
+interface Post {
+  user_id: string;
+  id: string;
+  title: string;
+  created_at: string;
+  content: string;
+}
 
 const FeedPage: React.FC = () => {
-  
-  
+  const [posts, setPosts] = useState<Post[]>([]);
+  useEffect(() => {
+    // Perform localStorage action
+    const token = localStorage.getItem("token");
+    console.log(`Bearer <${token}>`);
+    async function getposts() {
+      const response = await fetch(BACKEND_BASE_URL + "/posts", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response.json();
+    }
+    getposts().then((output) => {
+      console.log(output);
+      setPosts(output);
+    });
+  }, []);
+
   return (
     <Container maxWidth="lg">
-      <h1>Forum Feed</h1>
-      <MainFeaturedPost post={mainFeaturedPost} />
+      <Container style={{marginTop: 24}}>
+        <MainFeaturedPost post={posts[0]} />
+      </Container>
+
       <Grid container spacing={4}>
-        {featuredPosts.map((post) => (
-          <FeaturedPost key={post.title} post={post} />
+        {posts.slice(1).map((post) => (
+          <FeaturedPost key={post.id} post={post} />
         ))}
       </Grid>
     </Container>
