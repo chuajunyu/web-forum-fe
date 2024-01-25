@@ -72,7 +72,7 @@ const FullPost: React.FC<FullPostProps> = (props: FullPostProps) => {
     <Grid item xs={12} md={6}>
       <Card sx={{ display: "flex" }}>
         <CardContent sx={{ flex: 1 }}>
-          <Typography component="h2" variant="h5">
+          <Typography component="h1" variant="h5">
             {post.title}
           </Typography>
           <Typography variant="subtitle1" color="text.secondary">
